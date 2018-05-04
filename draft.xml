@@ -24,6 +24,17 @@
     
     <section title="Introduction">
       <t>Continuous authorization...</t>
+      
+      <t>
+        OAuth defines the refresh token in section 1.5 as:
+        
+        A refresh token is a string representing the authorization granted to
+           the client by the resource owner.
+      </t>
+      
+      <t>
+        This profile extends the meaning of this to include a requesting party.
+      </t>
     </section>
   </middle>
   <back>

@@ -62,6 +62,13 @@ Internet-Draft     OAuth 2.0 Continuous Authorization           May 2018
 
    Continuous authorization...
 
+   OAuth defines the refresh token in section 1.5 as: A refresh token is
+   a string representing the authorization granted to the client by the
+   resource owner.
+
+   This profile extends the meaning of this to include a requesting
+   party.
+
 2.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -90,13 +97,6 @@ Author's Address
 
    Email: jaredhanson@gmail.com
    URI:   http://www.jaredhanson.net/
-
-
-
-
-
-
-
 
 
 
