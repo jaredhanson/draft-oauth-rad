@@ -17,7 +17,13 @@
     </author>
     <date/>
     <abstract>
-      <t>This specification...</t>
+      <t>This specification defines a means for a client, representing a
+        requesting party, to obtain authorization from an OAuth 2.0
+        authorization server.  Once authorized, it defines means for that client
+        to obtain access tokens to any protected resources that trust the
+        authorization server.  This access is granted dynamically, potentially
+        after initial authorization, effectively putting the client into a mode
+        of continuous authorization.</t>
     </abstract>
   </front>
   <middle>
@@ -34,6 +40,47 @@
       
       <t>
         This profile extends the meaning of this to include a requesting party.
+      </t>
+      
+      <t>
+        The value of the scope parameter is expressed as a list of space-
+           delimited, case-sensitive strings.  The strings are defined by the
+           authorization server.
+           
+           Section 3.3.  This specificatin clarifies this to state that the
+           scope is defined by the resource server
+      </t>
+      
+      <t>
+        the authorization server authenticates the resource owner and obtains
+          an authorization decision (by asking the resource owner or by
+          establishing approval via other means)  section 4.1.1
+      </t>
+      
+      <t>
+        The scope of the access request as described by
+                 Section 3.3.  The requested scope MUST NOT include any scope
+                 not originally granted by the resource owner, and if omitted is
+                 treated as equal to the scope originally granted by the
+                 resource owner.
+        
+                 Section 6.
+                 
+                 This specification clarifies "originally granted", chiefly to
+                 remove the constraint.  This is in acknowledgement that the
+                 resource owner's grant can change dynamically at any time, either
+                 to decrease _or_ increase the scope of access.
+      </t>
+      
+      <t>
+        The refresh token is bound to the client and requesting party.
+      </t>
+      
+      <t>
+        Mechanism for resource server ot indicated trusted authorization servers:
+        `iss` https://tools.ietf.org/html/draft-hardt-oauth-distributed-00
+        
+        auri and duri rel values: https://tools.ietf.org/html/draft-sakimura-oauth-meta-08
       </t>
     </section>
   </middle>
