@@ -187,9 +187,44 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
    authorization server.  This can occur using any grant type supported
    by the AS
 
-2.4.  Client Seeks Access Token using Refresh Token
+   Has two options, one to request an access token from the token
+   endpoint immediately.  The other option is to initiate an
+   authorization request to the authorization endpoint.
+
+2.3.1.  Client Seeks Access Token using Refresh Token
 
    Client is already authorized by the requesting party at the AS.
+
+   For example:
+
+POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA&resource=https://server.example.net/resource
+
+2.3.2.  Client Redirects to Authorization Endpoint
+
+   Authorization server can interact with requesting party for purposes
+   such as authentication, claims gathering, etc.
+
+   For example:
+
+   GET /authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz
+       &resource=https://server.example.net/resource
+       &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
+   Host: server.example.com
+
+
+
+
+
+
+Hanson                  Expires December 4, 2018                [Page 4]
+
+Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
+
 
 3.  Normative References
 
@@ -214,46 +249,11 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
 
 Author's Address
 
-
-
-
-
-
-
-
-Hanson                  Expires December 4, 2018                [Page 4]
-
-Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
-
-
    Jared Hanson
    Auth0 Inc.
 
    Email: jaredhanson@gmail.com
    URI:   http://www.jaredhanson.net/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

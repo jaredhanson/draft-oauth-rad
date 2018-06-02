@@ -175,12 +175,52 @@ WWW-Authenticate: Bearer issuer="https://server.example.com",
           supported by the AS
         </t>
         
-      </section>
-      
-      <section title="Client Seeks Access Token using Refresh Token">
         <t>
-          Client is already authorized by the requesting party at the AS.
+          Has two options, one to request an access token from the token
+          endpoint immediately.  The other option is to initiate an
+          authorization request to the authorization endpoint.
         </t>
+        
+        <section title="Client Seeks Access Token using Refresh Token">
+          <t>
+            Client is already authorized by the requesting party at the AS.
+          </t>
+        
+          <figure>
+            <preamble>
+              For example:
+            </preamble>
+            <artwork><![CDATA[
+POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA&resource=https://server.example.net/resource
+]]></artwork>
+          </figure>
+        
+        </section>
+        
+        <section title="Client Redirects to Authorization Endpoint">
+          <t>
+            Authorization server can interact with requesting party for purposes
+            such as authentication, claims gathering, etc.
+          </t>
+          
+          <figure>
+            <preamble>
+              For example:
+            </preamble>
+            <artwork><![CDATA[
+GET /authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz
+    &resource=https://server.example.net/resource
+    &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
+Host: server.example.com
+]]></artwork>
+          </figure>
+          
+        </section>
         
       </section>
       
