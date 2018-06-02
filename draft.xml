@@ -128,6 +128,47 @@
       </t>
       </section>
     </section>
+    
+    <section title="Protocol Flow">
+      
+      <section title="Client Requests Resource Without Providing an Access Token">
+        <t>
+          The client requests a protected resource without providing any access
+          token.
+        </t>
+        
+        <figure>
+          <preamble>
+            For example:
+          </preamble>
+          <artwork><![CDATA[
+GET /resource HTTP/1.1
+Host: server.example.net
+]]></artwork>
+        </figure>
+        
+      </section>
+      
+      <section title="Resource Server Responds to Client's Tokenless Access Attempt">
+        <t>
+          The resource server responds to the client's tokenless resource
+          request.
+        </t>
+        
+        <figure>
+          <preamble>
+            For example:
+          </preamble>
+          <artwork><![CDATA[
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer issuer="https://server.example.com"
+]]></artwork>
+        </figure>
+        
+      </section>
+      
+    </section>
+    
   </middle>
   <back>
     <references title="Normative References">

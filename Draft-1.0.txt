@@ -146,7 +146,41 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
    distributed-00 auri and duri rel values: https://tools.ietf.org/html/
    draft-sakimura-oauth-meta-08
 
-2.  Normative References
+2.  Protocol Flow
+
+2.1.  Client Requests Resource Without Providing an Access Token
+
+   The client requests a protected resource without providing any access
+   token.
+
+   For example:
+
+   GET /resource HTTP/1.1
+   Host: server.example.net
+
+
+
+
+
+
+
+
+Hanson                  Expires December 4, 2018                [Page 3]
+
+Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
+
+
+2.2.  Resource Server Responds to Client's Tokenless Access Attempt
+
+   The resource server responds to the client's tokenless resource
+   request.
+
+   For example:
+
+   HTTP/1.1 401 Unauthorized
+   WWW-Authenticate: Bearer issuer="https://server.example.com"
+
+3.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -162,14 +196,6 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
               RFC 6749, DOI 10.17487/RFC6749, October 2012,
               <https://www.rfc-editor.org/info/rfc6749>.
 
-
-
-
-Hanson                  Expires December 4, 2018                [Page 3]
-
-Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
-
-
    [I-D.ietf-oauth-discovery]
               Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
               Authorization Server Metadata", draft-ietf-oauth-
@@ -182,32 +208,6 @@ Author's Address
 
    Email: jaredhanson@gmail.com
    URI:   http://www.jaredhanson.net/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
