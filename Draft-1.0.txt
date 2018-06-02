@@ -175,10 +175,21 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
    The resource server responds to the client's tokenless resource
    request.
 
-   For example:
+   For example (line breaks are for display purposes only):
 
    HTTP/1.1 401 Unauthorized
-   WWW-Authenticate: Bearer issuer="https://server.example.com"
+   WWW-Authenticate: Bearer issuer="https://server.example.com",
+                     scope="read.resource",
+
+2.3.  Client Seeks Access Token
+
+   Client seeks access token by making authorization request to
+   authorization server.  This can occur using any grant type supported
+   by the AS
+
+2.4.  Client Seeks Access Token using Refresh Token
+
+   Client is already authorized by the requesting party at the AS.
 
 3.  Normative References
 
@@ -203,6 +214,18 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
 
 Author's Address
 
+
+
+
+
+
+
+
+Hanson                  Expires December 4, 2018                [Page 4]
+
+Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
+
+
    Jared Hanson
    Auth0 Inc.
 
@@ -221,4 +244,37 @@ Author's Address
 
 
 
-Hanson                  Expires December 4, 2018                [Page 4]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hanson                  Expires December 4, 2018                [Page 5]

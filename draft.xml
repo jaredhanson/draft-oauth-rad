@@ -168,6 +168,22 @@ WWW-Authenticate: Bearer issuer="https://server.example.com",
         
       </section>
       
+      <section title="Client Seeks Access Token">
+        <t>
+          Client seeks access token by making authorization request to
+          authorization server.  This can occur using any grant type
+          supported by the AS
+        </t>
+        
+      </section>
+      
+      <section title="Client Seeks Access Token using Refresh Token">
+        <t>
+          Client is already authorized by the requesting party at the AS.
+        </t>
+        
+      </section>
+      
     </section>
     
   </middle>
