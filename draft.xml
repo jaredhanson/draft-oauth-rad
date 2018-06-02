@@ -220,6 +220,22 @@ Host: server.example.com
 ]]></artwork>
           </figure>
           
+          
+          <t>
+            Authorization server redirects back.
+          </t>
+          
+          <figure>
+            <preamble>
+              For example:
+            </preamble>
+            <artwork><![CDATA[
+HTTP/1.1 302 Found
+Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbIA
+          &state=xyz
+]]></artwork>
+          </figure>
+          
         </section>
         
       </section>
