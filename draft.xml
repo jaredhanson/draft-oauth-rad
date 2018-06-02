@@ -157,11 +157,12 @@ Host: server.example.net
         
         <figure>
           <preamble>
-            For example:
+            For example (line breaks are for display purposes only):
           </preamble>
           <artwork><![CDATA[
 HTTP/1.1 401 Unauthorized
-WWW-Authenticate: Bearer issuer="https://server.example.com"
+WWW-Authenticate: Bearer issuer="https://server.example.com",
+                  scope="read.resource",
 ]]></artwork>
         </figure>
         
