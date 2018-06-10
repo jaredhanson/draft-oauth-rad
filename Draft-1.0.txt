@@ -208,15 +208,15 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    must respond to the authentication challenge by obtaining an access
    token.
 
-   TODO: expand on the options here, with refresh or interaction, as
-   required
+   There are two options for obtaining an access token.
 
-2.2.  Interactive Authorization Using Authorization Endpoint
+   o  Interactive - the client redirects the end-user to the
+      authorization server's authorization endpoint, where the
+      authorization server interacts with the end-user in order to
+      obtain authorization
 
-   The authorization endpoint allows the authorization server to
-   interact with the end-user requesting party.  TODO: Give examples
-   here.
-
+   o  Non-interactive - used by the client to obtain an access token
+      directly without end-user interaction.  The client must have
 
 
 
@@ -225,6 +225,23 @@ Hanson                  Expires December 12, 2018               [Page 4]
 
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
+
+      obtained end-user authorization prior in order for this option to
+      be successful.
+
+   The process for obtaining an access token assumes that:
+
+   o  The client has discovered the necessary metadata in order to
+      interact with the authorization server.  This may have been
+      staticly configured or retrieved dynamically using OAuth 2.0
+      Authorization Server Metadata [I-D.ietf-oauth-discovery] or OpenID
+      Connect Discovery 1.0 [OpenID.Discovery].
+
+2.2.  Interactive Authorization Using Authorization Endpoint
+
+   The authorization endpoint allows the authorization server to
+   interact with the end-user requesting party.  TODO: Give examples
+   here.
 
 2.2.1.  Client Redirects Requesting Party to Authorization Endpoint
 
@@ -256,6 +273,15 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
        &scope=read.resource HTTP/1.1
    Host: server.example.com
 
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 5]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
 2.2.2.  Authorization Server Obtains Authorization
 
    The authorization server is used by a resource owner to apply access
@@ -273,15 +299,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    prompts typically include, but are not limited to, a login prompt in
    order to authenticate the requesting party (or a registration prompt
    if the requesting party does not have an account) and a consent
-
-
-
-
-Hanson                  Expires December 12, 2018               [Page 5]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
-
    prompt in order to obtain the requesting party's authorization for
    the client to access protected resources.
 
@@ -311,6 +328,16 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    the authorization server redirects the requesting party back to the
    client's redirection endpoint.
 
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 6]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
 2.2.3.  Authorization Server Issues Tokens to Client
 
    The authorization server issues an access token and, optionally, a
@@ -326,17 +353,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    client, and represents the requesting party's authorization for the
    client to access protected resources on the requesting party's
    behalf.  as defined in...
-
-
-
-
-
-
-
-Hanson                  Expires December 12, 2018               [Page 6]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
 
 2.3.  Non-Interactive Authorization Using Token Endpoint
 
@@ -363,6 +379,21 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    the value of that parameter to the "scope" parameter of the token
    request.
 
+
+
+
+
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 7]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
    For example (line breaks are for display purposes only):
 
    POST /token HTTP/1.1
@@ -382,17 +413,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
       The authorization server requires end-user interaction to proceed.
       The client should make an authorization request to the
       authorization endpoint.
-
-
-
-
-
-
-
-Hanson                  Expires December 12, 2018               [Page 7]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
 
 2.3.2.  Authorization Server Evaluates Access Control Policy
 
@@ -421,6 +441,15 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
       by redirecting the end-user requesting party to the authorization
       endpoint as described in Section 2.2.
 
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 8]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
 2.4.  Requesting a Resource With Authentication Credentials
 
 2.4.1.  Client Requests a Resource With Authentication Credentials
@@ -442,19 +471,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
               DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
               editor.org/info/rfc2119>.
 
-
-
-
-Hanson                  Expires December 12, 2018               [Page 8]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
-
-   [RFC4627]  Crockford, D., "The application/json Media Type for
-              JavaScript Object Notation (JSON)", RFC 4627,
-              DOI 10.17487/RFC4627, July 2006, <https://www.rfc-
-              editor.org/info/rfc4627>.
-
    [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
               RFC 6749, DOI 10.17487/RFC6749, October 2012,
               <https://www.rfc-editor.org/info/rfc6749>.
@@ -472,7 +488,23 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    [I-D.ietf-oauth-discovery]
               Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
               Authorization Server Metadata", draft-ietf-oauth-
-              discovery-05 (work in progress), January 2017.
+              discovery-10 (work in progress), March 2018.
+
+   [OpenID.Discovery]
+              Sakimura, N., Bradley, J., Jones, M., and E. Jay, "OpenID
+              Connect Discovery 1.0", November 2014,
+              <http://openid.net/specs/
+              openid-connect-discovery-1_0.html>.
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 9]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
 
 Author's Address
 
@@ -501,4 +533,28 @@ Author's Address
 
 
 
-Hanson                  Expires December 12, 2018               [Page 9]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018              [Page 10]

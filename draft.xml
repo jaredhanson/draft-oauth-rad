@@ -204,12 +204,41 @@ WWW-Authenticate: Bearer issuer="https://server.example.com",
           <t>
             In order to proceed with accessing the protected resource, the
             client must respond to the authentication challenge by obtaining an
-            access token.
+            access token.  
           </t>
           
           <t>
-            TODO: expand on the options here, with refresh or interaction, as required
+            There are two options for obtaining an access token.
+            
+            <list style='symbols'>
+              <t>
+                Interactive - the client redirects the end-user to the
+                authorization server's authorization endpoint, where the
+                authorization server interacts with the end-user in order to
+                obtain authorization
+              </t>
+              <t>
+                Non-interactive - used by the client to obtain an access token
+                directly without end-user interaction.  The client must have
+                obtained end-user authorization prior in order for this option
+                to be successful.
+              </t>
+            </list>
           </t>
+          
+          <t>
+            The process for obtaining an access token assumes that:
+            
+            <list style='symbols'>
+              <t>
+                The client has discovered the necessary metadata in order to
+                interact with the authorization server.  This may have been
+                staticly configured or retrieved dynamically using <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>
+                or <xref target="OpenID.Discovery">OpenID Connect Discovery 1.0</xref>.
+              </t>
+            </list>
+          </t>
+          
         </section>
         
       </section>
@@ -474,11 +503,34 @@ Authorization: Bearer mF_9.B5f-4.1JqM
   <back>
     <references title="Normative References">
       <?rfc include="reference.RFC.2119"?>
-      <?rfc include="reference.RFC.4627"?>
       <?rfc include="reference.RFC.6749"?>
       <?rfc include="reference.RFC.6750"?>
       <?rfc include="reference.RFC.7235"?>
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-05.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-10.xml'?>
+    
+      <reference anchor="OpenID.Discovery" target="http://openid.net/specs/openid-connect-discovery-1_0.html">
+        <front>
+          <title>OpenID Connect Discovery 1.0</title>
+          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
+            <organization abbrev="NRI">Nomura Research Institute,
+            Ltd.</organization>
+          </author>
+
+          <author fullname="John Bradley" initials="J." surname="Bradley">
+            <organization abbrev="Ping Identity">Ping Identity</organization>
+          </author>
+
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization abbrev="Microsoft">Microsoft</organization>
+          </author>
+
+          <author fullname="Edmund Jay" initials="E." surname="Jay">
+            <organization>Illumila</organization>
+          </author>
+
+          <date day="8" month="November" year="2014"/>
+        </front>
+      </reference>
     </references>
   </back>
 </rfc>
