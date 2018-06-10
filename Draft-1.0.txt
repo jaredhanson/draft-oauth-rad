@@ -312,21 +312,21 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 2.2.3.  Client Obtains Tokens From Authorization Server
 
+   The client obtains an access token and, optionally, a refresh token
+   from the authorization server.  The mechansims by which the tokens
+   are obtained are specific to the "response_type" parameter in the
+   authorization request and defined by OAuth 2.0 [RFC6749].
+
+   The access token is a credential used to access the protected
+   resource.
+
+   The authorization server _may_ issue a refresh token.  This token
+   represents (???), and may be used to optimize obtainning tokens for
+   other resources in subsequent authorization processes.
+
 2.3.  Non-Interactive Authorization Using Token Endpoint
 
-2.4.  Client Seeks Access Token
 
-   Client seeks access token by making authorization request to
-   authorization server.  This can occur using any grant type supported
-   by the AS
-
-   Has two options, one to request an access token from the token
-   endpoint immediately.  The other option is to initiate an
-   authorization request to the authorization endpoint.
-
-2.4.1.  Client Seeks Access Token using Refresh Token
-
-   Client is already authorized by the requesting party at the AS.
 
 
 
@@ -337,6 +337,10 @@ Hanson                  Expires December 12, 2018               [Page 6]
 
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
+
+2.3.1.  Client Seeks Access Token using Refresh Token
+
+   Client is already authorized by the requesting party at the AS.
 
    For example:
 
@@ -357,42 +361,7 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
       The client should make an authorization request to the
       authorization endpoint.
 
-2.4.2.  Client Redirects to Authorization Endpoint
-
-   Authorization server can interact with requesting party for purposes
-   such as authentication, claims gathering, etc.
-
-   For example:
-
-   GET /authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz
-       &resource=https://server.example.net/resource
-       &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
-   Host: server.example.com
-
-   Authorization server redirects back.
-
-   For example:
-
-   HTTP/1.1 302 Found
-   Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbIA
-             &state=xyz
-
-   The authorization server _may_ issue a refresh token.  This token
-   represents (???), and may be used to optimize obtainning tokens for
-   other resources in subsequent authorization processes.
-
 3.  Normative References
-
-
-
-
-
-
-
-Hanson                  Expires December 12, 2018               [Page 7]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -418,6 +387,13 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
               DOI 10.17487/RFC7235, June 2014, <https://www.rfc-
               editor.org/info/rfc7235>.
 
+
+
+Hanson                  Expires December 12, 2018               [Page 7]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
    [I-D.ietf-oauth-discovery]
               Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
               Authorization Server Metadata", draft-ietf-oauth-
@@ -430,6 +406,30 @@ Author's Address
 
    Email: jaredhanson@gmail.com
    URI:   http://www.jaredhanson.net/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -320,27 +320,28 @@ Host: server.example.com
         
         
         <section title="Client Obtains Tokens From Authorization Server">
+          <t>
+            The client obtains an access token and, optionally, a refresh token
+            from the authorization server.  The mechansims by which the tokens
+            are obtained are specific to the "response_type" parameter in the
+            authorization request and defined by OAuth 2.0 <xref target="RFC6749"/>.
+          </t>
           
+          <t>
+            The access token is a credential used to access the protected
+            resource.
+          </t>
+          
+          <t>
+            The authorization server _may_ issue a refresh token.  This
+            token represents (???), and may be used to optimize obtainning
+            tokens for other resources in subsequent authorization processes.
+          </t>
         </section>
         
       </section>
       
       <section title="Non-Interactive Authorization Using Token Endpoint">
-        
-      </section>
-      
-      <section title="Client Seeks Access Token">
-        <t>
-          Client seeks access token by making authorization request to
-          authorization server.  This can occur using any grant type
-          supported by the AS
-        </t>
-        
-        <t>
-          Has two options, one to request an access token from the token
-          endpoint immediately.  The other option is to initiate an
-          authorization request to the authorization endpoint.
-        </t>
         
         <section title="Client Seeks Access Token using Refresh Token">
           <t>
@@ -375,48 +376,6 @@ grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
             </list> 
           </t>
         
-        </section>
-        
-        <section title="Client Redirects to Authorization Endpoint">
-          <t>
-            Authorization server can interact with requesting party for purposes
-            such as authentication, claims gathering, etc.
-          </t>
-          
-          <figure>
-            <preamble>
-              For example:
-            </preamble>
-            <artwork><![CDATA[
-GET /authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz
-    &resource=https://server.example.net/resource
-    &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
-Host: server.example.com
-]]></artwork>
-          </figure>
-          
-          
-          <t>
-            Authorization server redirects back.
-          </t>
-          
-          <figure>
-            <preamble>
-              For example:
-            </preamble>
-            <artwork><![CDATA[
-HTTP/1.1 302 Found
-Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbIA
-          &state=xyz
-]]></artwork>
-          </figure>
-          
-          <t>
-            The authorization server _may_ issue a refresh token.  This
-            token represents (???), and may be used to optimize obtainning
-            tokens for other resources in subsequent authorization processes.
-          </t>
-          
         </section>
         
       </section>
