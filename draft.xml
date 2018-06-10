@@ -130,42 +130,75 @@
       </section>
     </section>
     
-    <section title="Protocol Flow">
+    <section title="Obtaining Authorization and Accessing Protected Resources">
       
-      <section title="Client Requests Resource Without Providing an Access Token">
+      <section title="Requesting a Resource Without Authentication Credentials">
         <t>
-          The client requests a protected resource without providing any access
-          token.
+          The RAD profile begins when a client attempts to access a protected
+          resource for the first time.  On the initial access attempt, the
+          client's knowledge of the resource and its capabilities is limited,
+          potentially only to the location of the resource itself.  In
+          particular the client is not expected to know what scope of access is
+          required, if any, or what authorization server governs access to the
+          resource.
         </t>
         
-        <figure>
-          <preamble>
-            For example:
-          </preamble>
-          <artwork><![CDATA[
+        <section title="Client Requests a Resource Without Authentication Credentials">
+          <t>
+            The client requests a protected resource without providing
+            authentication credentials.
+          </t>
+        
+          <figure>
+            <preamble>
+              For example (line breaks are for display purposes only):
+            </preamble>
+            <artwork><![CDATA[
 GET /resource HTTP/1.1
 Host: server.example.net
 ]]></artwork>
-        </figure>
+          </figure>
+        </section>
         
-      </section>
-      
-      <section title="Resource Server Responds to Client's Tokenless Access Attempt">
-        <t>
-          The resource server responds to the client's tokenless resource
-          request.
-        </t>
+        <section title="Resource Server Responds to Client's Unauthenticated Request">
+          <t>
+            The resource server responds to the client's unauthenticated request
+            by including a WWW-Authenticate header field, as described in Section
+            4.1 of <xref target="RFC7235"/>.
+          </t>
+          
+          <t>
+            This specification defines the "issuer" authentication parameter for
+            use by authentication schemes that wish to indicate which
+            authorization server issues access tokens that can be used as
+            authentication credentials when requesting a protected resource.
+          </t>
+          
+          <t>
+            The value of the "issuer" authentication parameter is a URL that is
+            the authorization server's issuer identifier.  This identifier MUST
+            be usable in such a manner that the client can discover information
+            needed to interact with the authorization server, including endpoint
+            locations needed to obtain access tokens.
+          </t>
+          
+          <t>
+            When responding to the client's unauthenticated request, the
+            resource server MUST include the "issuer" parameter and MAY include
+            a "scope" parameter, as described in Section 3 of <xref target="RFC6750"/>.
+          </t>
         
-        <figure>
-          <preamble>
-            For example (line breaks are for display purposes only):
-          </preamble>
-          <artwork><![CDATA[
+          <figure>
+            <preamble>
+              For example (line breaks are for display purposes only):
+            </preamble>
+            <artwork><![CDATA[
 HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Bearer issuer="https://server.example.com",
-                  scope="read.resource",
+                  scope="read.resource"
 ]]></artwork>
-        </figure>
+          </figure>
+        </section>
         
       </section>
       
@@ -197,7 +230,8 @@ Host: server.example.com
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA&resource=https://server.example.net/resource
+grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
+&resource=https://server.example.net/resource
 ]]></artwork>
           </figure>
           
@@ -268,6 +302,8 @@ Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbIA
       <?rfc include="reference.RFC.2119"?>
       <?rfc include="reference.RFC.4627"?>
       <?rfc include="reference.RFC.6749"?>
+      <?rfc include="reference.RFC.6750"?>
+      <?rfc include="reference.RFC.7235"?>
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-05.xml'?>
     </references>
   </back>

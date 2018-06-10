@@ -4,20 +4,20 @@
 
 Network Working Group                                          J. Hanson
 Internet-Draft                                                Auth0 Inc.
-Expires: December 11, 2018                                  June 9, 2018
+Expires: December 12, 2018                                 June 10, 2018
 
 
-                  OAuth 2.0 Just-in-Time Authorization
-                   draft-hanson-oauth-jit-auth-latest
+               OAuth 2.0 Resource Authorization Directive
+                     draft-hanson-oauth-rad-latest
 
 Abstract
 
-   Just-in-Time (JIT) authorization is a profile of OAuth 2.0.  JIT
-   defines how clients can discover which authorization server governs
-   access to a protected resource.  JIT also profiles existing OAuth 2.0
-   authorization grants to define how the client can obtain access to
-   any number of protected resources with the minimum amount of user
-   interaction.
+   Resource Authorization Directive (RAD) is a profile of OAuth 2.0.
+   RAD defines how clients can discover which authorization server
+   governs access to a protected resource.  RAD also profiles existing
+   OAuth 2.0 authorization grants to define how the client can obtain
+   access to any number of protected resources with the minimum amount
+   of user interaction.
 
 Status of This Memo
 
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 11, 2018.
+   This Internet-Draft will expire on December 12, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Hanson                  Expires December 11, 2018               [Page 1]
+Hanson                  Expires December 12, 2018               [Page 1]
 
-Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 
 1.  Introduction
@@ -69,7 +69,7 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
 
 1.2.  Roles
 
-   JIT enhances the roles defined by OAuth in RFC 6749, section 1.1, in
+   RAD enhances the roles defined by OAuth in RFC 6749, section 1.1, in
    the following manner:
 
    resource owner:
@@ -109,9 +109,9 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
 
 
 
-Hanson                  Expires December 11, 2018               [Page 2]
+Hanson                  Expires December 12, 2018               [Page 2]
 
-Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 
    OAuth defines the refresh token in section 1.5 as: A refresh token is
@@ -146,42 +146,68 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
    distributed-00 auri and duri rel values: https://tools.ietf.org/html/
    draft-sakimura-oauth-meta-08
 
-2.  Protocol Flow
+2.  Obtaining Authorization and Accessing Protected Resources
 
-2.1.  Client Requests Resource Without Providing an Access Token
+2.1.  Requesting a Resource Without Authentication Credentials
 
-   The client requests a protected resource without providing any access
-   token.
+   The RAD profile begins when a client attempts to access a protected
+   resource for the first time.  On the initial access attempt, the
+   client's knowledge of the resource and its capabilities is limited,
+   potentially only to the location of the resource itself.  In
+   particular the client is not expected to know what scope of access is
+   required, if any, or what authorization server governs access to the
+   resource.
 
-   For example:
+
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 3]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
+2.1.1.  Client Requests a Resource Without Authentication Credentials
+
+   The client requests a protected resource without providing
+   authentication credentials.
+
+   For example (line breaks are for display purposes only):
 
    GET /resource HTTP/1.1
    Host: server.example.net
 
+2.1.2.  Resource Server Responds to Client's Unauthenticated Request
 
+   The resource server responds to the client's unauthenticated request
+   by including a WWW-Authenticate header field, as described in
+   Section 4.1 of [RFC7235].
 
+   This specification defines the "issuer" authentication parameter for
+   use by authentication schemes that wish to indicate which
+   authorization server issues access tokens that can be used as
+   authentication credentials when requesting a protected resource.
 
+   The value of the "issuer" authentication parameter is a URL that is
+   the authorization server's issuer identifier.  This identifier MUST
+   be usable in such a manner that the client can discover information
+   needed to interact with the authorization server, including endpoint
+   locations needed to obtain access tokens.
 
-
-
-
-Hanson                  Expires December 11, 2018               [Page 3]
-
-Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
-
-
-2.2.  Resource Server Responds to Client's Tokenless Access Attempt
-
-   The resource server responds to the client's tokenless resource
-   request.
+   When responding to the client's unauthenticated request, the resource
+   server MUST include the "issuer" parameter and MAY include a "scope"
+   parameter, as described in Section 3 of [RFC6750].
 
    For example (line breaks are for display purposes only):
 
    HTTP/1.1 401 Unauthorized
    WWW-Authenticate: Bearer issuer="https://server.example.com",
-                     scope="read.resource",
+                     scope="read.resource"
 
-2.3.  Client Seeks Access Token
+2.2.  Client Seeks Access Token
 
    Client seeks access token by making authorization request to
    authorization server.  This can occur using any grant type supported
@@ -191,18 +217,28 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
    endpoint immediately.  The other option is to initiate an
    authorization request to the authorization endpoint.
 
-2.3.1.  Client Seeks Access Token using Refresh Token
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 4]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
+2.2.1.  Client Seeks Access Token using Refresh Token
 
    Client is already authorized by the requesting party at the AS.
 
    For example:
 
-POST /token HTTP/1.1
-Host: server.example.com
-Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
-Content-Type: application/x-www-form-urlencoded
+   POST /token HTTP/1.1
+   Host: server.example.com
+   Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+   Content-Type: application/x-www-form-urlencoded
 
-grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA&resource=https://server.example.net/resource
+   grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
+   &resource=https://server.example.net/resource
 
    Responds with errors as defined in Section 5.2 of RFC 6749.  In
    addtion, the following error codes are defined.
@@ -213,18 +249,10 @@ grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA&resource=https://s
       The client should make an authorization request to the
       authorization endpoint.
 
-2.3.2.  Client Redirects to Authorization Endpoint
+2.2.2.  Client Redirects to Authorization Endpoint
 
    Authorization server can interact with requesting party for purposes
    such as authentication, claims gathering, etc.
-
-
-
-
-Hanson                  Expires December 11, 2018               [Page 4]
-
-Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
-
 
    For example:
 
@@ -245,6 +273,15 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
    represents (???), and may be used to optimize obtainning tokens for
    other resources in subsequent authorization processes.
 
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 5]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
 3.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -260,6 +297,16 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
    [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
               RFC 6749, DOI 10.17487/RFC6749, October 2012,
               <https://www.rfc-editor.org/info/rfc6749>.
+
+   [RFC6750]  Jones, M. and D. Hardt, "The OAuth 2.0 Authorization
+              Framework: Bearer Token Usage", RFC 6750,
+              DOI 10.17487/RFC6750, October 2012, <https://www.rfc-
+              editor.org/info/rfc6750>.
+
+   [RFC7235]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
+              Protocol (HTTP/1.1): Authentication", RFC 7235,
+              DOI 10.17487/RFC7235, June 2014, <https://www.rfc-
+              editor.org/info/rfc7235>.
 
    [I-D.ietf-oauth-discovery]
               Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
@@ -277,4 +324,13 @@ Author's Address
 
 
 
-Hanson                  Expires December 11, 2018               [Page 5]
+
+
+
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 6]
