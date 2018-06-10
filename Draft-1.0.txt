@@ -4,7 +4,7 @@
 
 Network Working Group                                          J. Hanson
 Internet-Draft                                                Auth0 Inc.
-Expires: December 4, 2018                                   June 2, 2018
+Expires: December 11, 2018                                  June 9, 2018
 
 
                   OAuth 2.0 Just-in-Time Authorization
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 4, 2018.
+   This Internet-Draft will expire on December 11, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Hanson                  Expires December 4, 2018                [Page 1]
+Hanson                  Expires December 11, 2018               [Page 1]
 
 Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
 
@@ -109,7 +109,7 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
 
 
 
-Hanson                  Expires December 4, 2018                [Page 2]
+Hanson                  Expires December 11, 2018               [Page 2]
 
 Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
 
@@ -165,7 +165,7 @@ Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
 
 
 
-Hanson                  Expires December 4, 2018                [Page 3]
+Hanson                  Expires December 11, 2018               [Page 3]
 
 Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
 
@@ -204,10 +204,27 @@ Content-Type: application/x-www-form-urlencoded
 
 grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA&resource=https://server.example.net/resource
 
+   Responds with errors as defined in Section 5.2 of RFC 6749.  In
+   addtion, the following error codes are defined.
+
+   interaction_required
+
+      The authorizatino server requires end-user interaction to proceed.
+      The client should make an authorization request to the
+      authorization endpoint.
+
 2.3.2.  Client Redirects to Authorization Endpoint
 
    Authorization server can interact with requesting party for purposes
    such as authentication, claims gathering, etc.
+
+
+
+
+Hanson                  Expires December 11, 2018               [Page 4]
+
+Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
+
 
    For example:
 
@@ -216,15 +233,17 @@ grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA&resource=https://s
        &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
    Host: server.example.com
 
+   Authorization server redirects back.
 
+   For example:
 
+   HTTP/1.1 302 Found
+   Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbIA
+             &state=xyz
 
-
-
-Hanson                  Expires December 4, 2018                [Page 4]
-
-Internet-Draft    OAuth 2.0 Just-in-Time Authorization         June 2018
-
+   The authorization server _may_ issue a refresh token.  This token
+   represents (???), and may be used to optimize obtainning tokens for
+   other resources in subsequent authorization processes.
 
 3.  Normative References
 
@@ -258,23 +277,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Hanson                  Expires December 4, 2018                [Page 5]
+Hanson                  Expires December 11, 2018               [Page 5]
