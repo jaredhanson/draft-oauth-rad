@@ -309,23 +309,23 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
    After completing its interaction with the end-user requesting party,
    the authorization server redirects the requesting party back to the
+   client's redirection endpoint.
 
-2.2.3.  Client Obtains Tokens From Authorization Server
+2.2.3.  Authorization Server Issues Tokens to Client
 
-   The client obtains an access token and, optionally, a refresh token
-   from the authorization server.  The mechansims by which the tokens
-   are obtained are specific to the "response_type" parameter in the
+   The authorization server issues an access token and, optionally, a
+   refresh token to the client.  The mechansims by which the tokens are
+   issued are specific to the "response_type" parameter in the
    authorization request and defined by OAuth 2.0 [RFC6749].
 
    The access token is a credential used to access the protected
-   resource.
+   resource.  The client uses this access when making a request to a
+   protected resource as described in Section 2.4.
 
-   The authorization server _may_ issue a refresh token.  This token
-   represents (???), and may be used to optimize obtainning tokens for
-   other resources in subsequent authorization processes.
-
-2.3.  Non-Interactive Authorization Using Token Endpoint
-
+   The refresh token is a binding between the requesting party and the
+   client, and represents the requesting party's authorization for the
+   client to access protected resources on the requesting party's
+   behalf.  as defined in...
 
 
 
@@ -338,11 +338,32 @@ Hanson                  Expires December 12, 2018               [Page 6]
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 
-2.3.1.  Client Seeks Access Token using Refresh Token
+2.3.  Non-Interactive Authorization Using Token Endpoint
 
-   Client is already authorized by the requesting party at the AS.
+2.3.1.  Client Requests Authorization using Refresh Token
 
-   For example:
+   If the client has already obtained the requesting party's
+   authorization to access protected resources, and the client was
+   issued a refresh token, the client can request authorization to a
+   protected resource using the refresh token.
+
+   In addition to the parameters defined by Section 6 of OAuth 2.0
+   [RFC6749], the following parameters are also defined:
+
+   resource
+
+      Indicates the location of the target service or resource where the
+      client intends to use the requested access token.  The value of
+      this parameter MUST be an absolute URI.
+
+   The client MUST include the location of the resource it is attempting
+   to access as the value of the "resource" parameter in the token
+   request.  If the resource server included a "scope" parameter in the
+   "WWW-Authenticate" header field of its response, the client MUST add
+   the value of that parameter to the "scope" parameter of the token
+   request.
+
+   For example (line breaks are for display purposes only):
 
    POST /token HTTP/1.1
    Host: server.example.com
@@ -350,16 +371,69 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    Content-Type: application/x-www-form-urlencoded
 
    grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
-   &resource=https://server.example.net/resource
+   &resource=https%3A%2F%2Fserver.example.net%2Fresource
+   &scope=read.resource
 
    Responds with errors as defined in Section 5.2 of RFC 6749.  In
    addtion, the following error codes are defined.
 
    interaction_required
 
-      The authorizatino server requires end-user interaction to proceed.
+      The authorization server requires end-user interaction to proceed.
       The client should make an authorization request to the
       authorization endpoint.
+
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 7]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
+2.3.2.  Authorization Server Evaluates Access Control Policy
+
+   The client validates the refresh token and determines which which
+   requesting party and client it was bound to.  The authorization
+   server then evaluates access control policies to determine what
+   permissions the requesting party is authorized for at the target
+   resource.  If the authorized permissions contain all requested
+   scopes, and any additional conditions put in place by policy are met,
+   the authorization server issues an access token as described in
+   Section 5.1 of OAuth 2.0 [RFC6749].
+
+2.3.3.  Authorization Server Response on Authorization Failure
+
+   If the client's request to the token endpoint results in failure, the
+   authorization server returns an error response as described in
+   Section 5.2 of OAuth 2.0 [RFC6749].
+
+   In addition to the error codes defined in Section 5.2 of OAuth 2.0
+   [RFC6749], the following error codes are defined by this profile:
+
+   interaction_required
+
+      The authorization server requires end-user interaction of some
+      form to proceed.  The client MAY attempt to obtain an access token
+      by redirecting the end-user requesting party to the authorization
+      endpoint as described in Section 2.2.
+
+2.4.  Requesting a Resource With Authentication Credentials
+
+2.4.1.  Client Requests a Resource With Authentication Credentials
+
+   The client requests a protected resource and presents authentication
+   credentials.  The authentication credential is the access token
+   issued by the authorization server.
+
+   For example (line breaks are for display purposes only):
+
+   GET /resource HTTP/1.1
+   Host: server.example.net
+   Authorization: Bearer mF_9.B5f-4.1JqM
 
 3.  Normative References
 
@@ -367,6 +441,14 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
               editor.org/info/rfc2119>.
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 8]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
 
    [RFC4627]  Crockford, D., "The application/json Media Type for
               JavaScript Object Notation (JSON)", RFC 4627,
@@ -386,13 +468,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
               Protocol (HTTP/1.1): Authentication", RFC 7235,
               DOI 10.17487/RFC7235, June 2014, <https://www.rfc-
               editor.org/info/rfc7235>.
-
-
-
-Hanson                  Expires December 12, 2018               [Page 7]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
 
    [I-D.ietf-oauth-discovery]
               Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
@@ -426,23 +501,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Hanson                  Expires December 12, 2018               [Page 8]
+Hanson                  Expires December 12, 2018               [Page 9]
