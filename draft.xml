@@ -280,7 +280,7 @@ Host: server.example.com
             interactive prompts with the end-user in order to collect the
             necessary information required to satisfy policy conditions.  Such
             prompts typically include, but are not limited to, a login prompt in
-            order to authenticate the requesting part (or a registration prompt
+            order to authenticate the requesting party (or a registration prompt
             if the requesting party does not have an account) and a consent
             prompt in order to obtain the requesting party's authorization for
             the client to access protected resources.
@@ -292,30 +292,40 @@ Host: server.example.com
             scenarios where an end-user is requesing access to a document that
             is owned by their colleage.  Furthermore, the colloration may be
             occuring between organizations, such as when two employees from two
-            companies are participating in a joint project.  In such cases, the
-            authorization server may have to perform multi-party authorization,
-            where consent is collected from both the resource owner and the
-            requeting party. 
+            different companies are participating in a joint project.  In such
+            cases, the authorization server may have to perform multi-party
+            authorization, where consent is collected from both the resource
+            owner and the requesting party. 
           </t>
           
           <t>
             In scenarios in which the resource owner and requesting party are
-            different, authorization of the resource owner is asynchronous with
+            not the same, authorization of the resource owner is asynchronous with
             respect to any interactions with the requesting party.  The resource
             owner may have granted the requesting party access ahead-of-time,
             for example by inviting the requesting party by email address in a
             sharing dialog.  The resource owner may also grant access to the
             requesting party just-in-time, for example when the requesting party
-            clicks a "request access" button.  Any interactions between the
+            clicks a "request access" button after attempting to view a document
+            that they are not allowed to access.  Any interactions between the
             resource owner and requesting party are at the discretion of the
             authorization server.
           </t>
           
           <t>
-            Once the authorization server has completed any interactions with
-            the requesting party, the requesting party is redirected back...
+            After completing its interaction with the end-user requesting party,
+            the authorization server redirects the requesting party back to the
           </t>
         </section>
+        
+        
+        <section title="Client Obtains Tokens From Authorization Server">
+          
+        </section>
+        
+      </section>
+      
+      <section title="Non-Interactive Authorization Using Token Endpoint">
         
       </section>
       

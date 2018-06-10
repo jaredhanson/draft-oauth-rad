@@ -271,7 +271,7 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    interactive prompts with the end-user in order to collect the
    necessary information required to satisfy policy conditions.  Such
    prompts typically include, but are not limited to, a login prompt in
-   order to authenticate the requesting part (or a registration prompt
+   order to authenticate the requesting party (or a registration prompt
    if the requesting party does not have an account) and a consent
 
 
@@ -290,26 +290,31 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    scenarios where an end-user is requesing access to a document that is
    owned by their colleage.  Furthermore, the colloration may be
    occuring between organizations, such as when two employees from two
-   companies are participating in a joint project.  In such cases, the
-   authorization server may have to perform multi-party authorization,
-   where consent is collected from both the resource owner and the
-   requeting party.
+   different companies are participating in a joint project.  In such
+   cases, the authorization server may have to perform multi-party
+   authorization, where consent is collected from both the resource
+   owner and the requesting party.
 
-   In scenarios in which the resource owner and requesting party are
-   different, authorization of the resource owner is asynchronous with
+   In scenarios in which the resource owner and requesting party are not
+   the same, authorization of the resource owner is asynchronous with
    respect to any interactions with the requesting party.  The resource
    owner may have granted the requesting party access ahead-of-time, for
    example by inviting the requesting party by email address in a
    sharing dialog.  The resource owner may also grant access to the
    requesting party just-in-time, for example when the requesting party
-   clicks a "request access" button.  Any interactions between the
+   clicks a "request access" button after attempting to view a document
+   that they are not allowed to access.  Any interactions between the
    resource owner and requesting party are at the discretion of the
    authorization server.
 
-   Once the authorization server has completed any interactions with the
-   requesting party, the requesting party is redirected back...
+   After completing its interaction with the end-user requesting party,
+   the authorization server redirects the requesting party back to the
 
-2.3.  Client Seeks Access Token
+2.2.3.  Client Obtains Tokens From Authorization Server
+
+2.3.  Non-Interactive Authorization Using Token Endpoint
+
+2.4.  Client Seeks Access Token
 
    Client seeks access token by making authorization request to
    authorization server.  This can occur using any grant type supported
@@ -319,14 +324,9 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    endpoint immediately.  The other option is to initiate an
    authorization request to the authorization endpoint.
 
-2.3.1.  Client Seeks Access Token using Refresh Token
+2.4.1.  Client Seeks Access Token using Refresh Token
 
    Client is already authorized by the requesting party at the AS.
-
-
-
-
-
 
 
 
@@ -357,7 +357,7 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
       The client should make an authorization request to the
       authorization endpoint.
 
-2.3.2.  Client Redirects to Authorization Endpoint
+2.4.2.  Client Redirects to Authorization Endpoint
 
    Authorization server can interact with requesting party for purposes
    such as authentication, claims gathering, etc.
