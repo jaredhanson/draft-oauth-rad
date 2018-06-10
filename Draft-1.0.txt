@@ -69,8 +69,8 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 1.2.  Roles
 
-   RAD enhances the roles defined by OAuth in RFC 6749, section 1.1, in
-   the following manner:
+   RAD enhances the roles defined by Section 1.1 of OAuth 2.0 [RFC6749],
+   in the following manner:
 
    resource owner:
 
@@ -151,16 +151,16 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 2.1.  Requesting a Resource Without Authentication Credentials
 
    The RAD profile begins when a client attempts to access a protected
-   resource for the first time.  On the initial access attempt, the
-   client's knowledge of the resource and its capabilities is limited,
-   potentially only to the location of the resource itself.  In
-   particular the client is not expected to know what scope of access is
-   required, if any, or what authorization server governs access to the
-   resource.
+   resource.  On the initial access attempt, the client's knowledge of
+   the resource and its capabilities is limited, potentially only to the
+   location of the resource itself.  In particular the client is not
+   expected to know what scope of access is required, if any, or what
+   authorization server governs access to the resource.
 
+2.1.1.  Client Requests a Resource Without Authentication Credentials
 
-
-
+   The client requests a protected resource without providing
+   authentication credentials.
 
 
 
@@ -169,11 +169,6 @@ Hanson                  Expires December 12, 2018               [Page 3]
 
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
-
-2.1.1.  Client Requests a Resource Without Authentication Credentials
-
-   The client requests a protected resource without providing
-   authentication credentials.
 
    For example (line breaks are for display purposes only):
 
@@ -207,15 +202,20 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    WWW-Authenticate: Bearer issuer="https://server.example.com",
                      scope="read.resource"
 
-2.2.  Client Seeks Access Token
+2.1.3.  Client Proceeds to Respond to Authentication Challenge
 
-   Client seeks access token by making authorization request to
-   authorization server.  This can occur using any grant type supported
-   by the AS
+   In order to proceed with accessing the protected resource, the client
+   must respond to the authentication challenge by obtaining an access
+   token.
 
-   Has two options, one to request an access token from the token
-   endpoint immediately.  The other option is to initiate an
-   authorization request to the authorization endpoint.
+   TODO: expand on the options here, with refresh or interaction, as
+   required
+
+2.2.  Interactive Authorization Using Authorization Endpoint
+
+   The authorization endpoint allows the authorization server to
+   interact with the end-user requesting party.  TODO: Give examples
+   here.
 
 
 
@@ -226,9 +226,117 @@ Hanson                  Expires December 12, 2018               [Page 4]
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 
-2.2.1.  Client Seeks Access Token using Refresh Token
+2.2.1.  Client Redirects Requesting Party to Authorization Endpoint
+
+   The client redirects the end-user requesting party to the
+   authorization server's authorization endpoint, as described in OAuth
+   2.0 [RFC6749].
+
+   In addition to the parameters defined by OAuth 2.0 [RFC6749], the
+   following parameters are also defined:
+
+   resource
+
+      Indicates the location of the target service or resource where the
+      client intends to use the requested access token.  The value of
+      this parameter MUST be an absolute URI.
+
+   The client MUST include the location of the resource it is attempting
+   to access as the value of the "resource" parameter in the
+   authorization request.  If the resource server included a "scope"
+   parameter in the "WWW-Authenticate" header field of its response, the
+   client MUST add the value of that parameter to the "scope" parameter
+   of the authorization request.
+
+   For example (line breaks are for display purposes only):
+
+   GET /authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz
+       &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
+       &resource=https%3A%2F%2Fserver.example.net%2Fresource
+       &scope=read.resource HTTP/1.1
+   Host: server.example.com
+
+2.2.2.  Authorization Server Obtains Authorization
+
+   The authorization server is used by a resource owner to apply access
+   control policies.  The authorization server MUST ensure that the
+   necessary conditions defined by said policies are met in order to
+   issue an access token.  If necessary conditions are not met, the
+   authorization server MUST NOT issue an access token.  The mechanisms
+   by which policies are defined by the resource owner are outside the
+   scope of this specification.
+
+   Once the end-user requesting party has been redirected to the
+   authorization endpoint, the authorization server can engage in
+   interactive prompts with the end-user in order to collect the
+   necessary information required to satisfy policy conditions.  Such
+   prompts typically include, but are not limited to, a login prompt in
+   order to authenticate the requesting part (or a registration prompt
+   if the requesting party does not have an account) and a consent
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 5]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
+   prompt in order to obtain the requesting party's authorization for
+   the client to access protected resources.
+
+   The end-user requesting party may or may not be the same as the
+   resource owner.  Such cases occur, for example, in document sharing
+   scenarios where an end-user is requesing access to a document that is
+   owned by their colleage.  Furthermore, the colloration may be
+   occuring between organizations, such as when two employees from two
+   companies are participating in a joint project.  In such cases, the
+   authorization server may have to perform multi-party authorization,
+   where consent is collected from both the resource owner and the
+   requeting party.
+
+   In scenarios in which the resource owner and requesting party are
+   different, authorization of the resource owner is asynchronous with
+   respect to any interactions with the requesting party.  The resource
+   owner may have granted the requesting party access ahead-of-time, for
+   example by inviting the requesting party by email address in a
+   sharing dialog.  The resource owner may also grant access to the
+   requesting party just-in-time, for example when the requesting party
+   clicks a "request access" button.  Any interactions between the
+   resource owner and requesting party are at the discretion of the
+   authorization server.
+
+   Once the authorization server has completed any interactions with the
+   requesting party, the requesting party is redirected back...
+
+2.3.  Client Seeks Access Token
+
+   Client seeks access token by making authorization request to
+   authorization server.  This can occur using any grant type supported
+   by the AS
+
+   Has two options, one to request an access token from the token
+   endpoint immediately.  The other option is to initiate an
+   authorization request to the authorization endpoint.
+
+2.3.1.  Client Seeks Access Token using Refresh Token
 
    Client is already authorized by the requesting party at the AS.
+
+
+
+
+
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 6]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
 
    For example:
 
@@ -249,7 +357,7 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
       The client should make an authorization request to the
       authorization endpoint.
 
-2.2.2.  Client Redirects to Authorization Endpoint
+2.3.2.  Client Redirects to Authorization Endpoint
 
    Authorization server can interact with requesting party for purposes
    such as authentication, claims gathering, etc.
@@ -273,16 +381,18 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    represents (???), and may be used to optimize obtainning tokens for
    other resources in subsequent authorization processes.
 
+3.  Normative References
 
 
 
 
-Hanson                  Expires December 12, 2018               [Page 5]
+
+
+
+Hanson                  Expires December 12, 2018               [Page 7]
 
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
-
-3.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -333,4 +443,6 @@ Author's Address
 
 
 
-Hanson                  Expires December 12, 2018               [Page 6]
+
+
+Hanson                  Expires December 12, 2018               [Page 8]

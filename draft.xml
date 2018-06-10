@@ -39,8 +39,8 @@
       
       <section title="Roles">
         <t>
-          RAD enhances the roles defined by OAuth in RFC 6749, section 1.1, in
-          the following manner:
+          RAD enhances the roles defined by Section 1.1 of OAuth 2.0 <xref target="RFC6749"/>,
+          in the following manner:
           
           <list style="hanging">
           <t hangText="resource owner:"><vspace blankLines="1"/>
@@ -135,12 +135,11 @@
       <section title="Requesting a Resource Without Authentication Credentials">
         <t>
           The RAD profile begins when a client attempts to access a protected
-          resource for the first time.  On the initial access attempt, the
-          client's knowledge of the resource and its capabilities is limited,
-          potentially only to the location of the resource itself.  In
-          particular the client is not expected to know what scope of access is
-          required, if any, or what authorization server governs access to the
-          resource.
+          resource.  On the initial access attempt, the client's knowledge of
+          the resource and its capabilities is limited, potentially only to the
+          location of the resource itself.  In particular the client is not
+          expected to know what scope of access is required, if any, or what
+          authorization server governs access to the resource.
         </t>
         
         <section title="Client Requests a Resource Without Authentication Credentials">
@@ -198,6 +197,124 @@ WWW-Authenticate: Bearer issuer="https://server.example.com",
                   scope="read.resource"
 ]]></artwork>
           </figure>
+        </section>
+        
+        
+        <section title="Client Proceeds to Respond to Authentication Challenge">
+          <t>
+            In order to proceed with accessing the protected resource, the
+            client must respond to the authentication challenge by obtaining an
+            access token.
+          </t>
+          
+          <t>
+            TODO: expand on the options here, with refresh or interaction, as required
+          </t>
+        </section>
+        
+      </section>
+      
+      <section title="Interactive Authorization Using Authorization Endpoint">
+        <t>
+          The authorization endpoint allows the authorization server to interact
+          with the end-user requesting party.  TODO: Give examples here.
+        </t>
+        
+        <section title="Client Redirects Requesting Party to Authorization Endpoint">
+          <t>
+            The client redirects the end-user requesting party to the
+            authorization server's authorization endpoint, as described in OAuth
+            2.0 <xref target="RFC6749"/>.
+          </t>
+          
+          <t>
+            In addition to the parameters defined by OAuth 2.0 <xref target="RFC6749"/>,
+            the following parameters are also defined:
+          
+            <list style="hanging"> 
+              <t hangText="resource"> <vspace blankLines="1"/>
+                Indicates the location of the target service or resource where
+                the client intends to use the requested access token.  The value
+                of this parameter MUST be an absolute URI.
+              </t>
+            </list> 
+          </t>
+          
+          <t>
+            The client MUST include the location of the resource it is 
+            attempting to access as the value of the "resource" parameter in the
+            authorization request.  If the resource server included a "scope"
+            parameter in the "WWW-Authenticate" header field of its response,
+            the client MUST add the value of that parameter to the "scope"
+            parameter of the authorization request.
+          </t>
+          
+          <figure>
+            <preamble>
+              For example (line breaks are for display purposes only):
+            </preamble>
+            <artwork><![CDATA[
+GET /authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz
+    &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
+    &resource=https%3A%2F%2Fserver.example.net%2Fresource
+    &scope=read.resource HTTP/1.1
+Host: server.example.com
+]]></artwork>
+          </figure>
+        </section>
+        
+        <section title="Authorization Server Obtains Authorization">
+          <t>
+            The authorization server is used by a resource owner to apply access
+            control policies.  The authorization server MUST ensure that the
+            necessary conditions defined by said policies are met in order to
+            issue an access token.  If necessary conditions are not met, the
+            authorization server MUST NOT issue an access token.  The mechanisms
+            by which policies are defined by the resource owner are outside the
+            scope of this specification.
+          </t>
+          
+          <t>
+            Once the end-user requesting party has been redirected to the
+            authorization endpoint, the authorization server can engage in
+            interactive prompts with the end-user in order to collect the
+            necessary information required to satisfy policy conditions.  Such
+            prompts typically include, but are not limited to, a login prompt in
+            order to authenticate the requesting part (or a registration prompt
+            if the requesting party does not have an account) and a consent
+            prompt in order to obtain the requesting party's authorization for
+            the client to access protected resources.
+          </t>
+          
+          <t>
+            The end-user requesting party may or may not be the same as the
+            resource owner.  Such cases occur, for example, in document sharing
+            scenarios where an end-user is requesing access to a document that
+            is owned by their colleage.  Furthermore, the colloration may be
+            occuring between organizations, such as when two employees from two
+            companies are participating in a joint project.  In such cases, the
+            authorization server may have to perform multi-party authorization,
+            where consent is collected from both the resource owner and the
+            requeting party. 
+          </t>
+          
+          <t>
+            In scenarios in which the resource owner and requesting party are
+            different, authorization of the resource owner is asynchronous with
+            respect to any interactions with the requesting party.  The resource
+            owner may have granted the requesting party access ahead-of-time,
+            for example by inviting the requesting party by email address in a
+            sharing dialog.  The resource owner may also grant access to the
+            requesting party just-in-time, for example when the requesting party
+            clicks a "request access" button.  Any interactions between the
+            resource owner and requesting party are at the discretion of the
+            authorization server.
+          </t>
+          
+          <t>
+            Once the authorization server has completed any interactions with
+            the requesting party, the requesting party is redirected back...
+          </t>
         </section>
         
       </section>
