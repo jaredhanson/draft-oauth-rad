@@ -212,16 +212,14 @@ WWW-Authenticate: Bearer issuer="https://server.example.com",
             
             <list style='symbols'>
               <t>
-                Interactive - the client redirects the end-user to the
-                authorization server's authorization endpoint, where the
-                authorization server interacts with the end-user in order to
-                obtain authorization
+                Interactive - used by the client to allow the authorization
+                server to interact with the end-user.  This option is described
+                in <xref target="interactive-authz"/>.
               </t>
               <t>
                 Non-interactive - used by the client to obtain an access token
-                directly without end-user interaction.  The client must have
-                obtained end-user authorization prior in order for this option
-                to be successful.
+                directly without end-user interaction.  This option is described
+                in <xref target="non-interactive-authz"/>.
               </t>
             </list>
           </t>
@@ -232,21 +230,30 @@ WWW-Authenticate: Bearer issuer="https://server.example.com",
             <list style='symbols'>
               <t>
                 The client has discovered the necessary metadata in order to
-                interact with the authorization server.  This may have been
-                staticly configured or retrieved dynamically using <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>
+                interact with the authorization server.  This information may
+                have been statically configured or retrieved dynamically using <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>
                 or <xref target="OpenID.Discovery">OpenID Connect Discovery 1.0</xref>.
+              </t>
+              
+              <t>
+                The client has obtained a client identifer and client
+                credentials valid at the authorization server.  These
+                credentials may have been statically configured or created
+                dynamically using <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref>.
               </t>
             </list>
           </t>
-          
         </section>
         
       </section>
       
       <section title="Interactive Authorization Using Authorization Endpoint" anchor="interactive-authz">
         <t>
-          The authorization endpoint allows the authorization server to interact
-          with the end-user requesting party.  TODO: Give examples here.
+          When end-user interaction is necessary in order to obtain an access
+          token, the client requests authorization by redirecting the end-user
+          to the authorization endpoint with an authorization request.  The
+          authorization server then interacts with the end-user in order to
+          obtain authorization.
         </t>
         
         <section title="Client Redirects Requesting Party to Authorization Endpoint">
@@ -318,9 +325,9 @@ Host: server.example.com
           <t>
             The end-user requesting party may or may not be the same as the
             resource owner.  Such cases occur, for example, in document sharing
-            scenarios where an end-user is requesing access to a document that
+            scenarios where an end-user is requesting access to a document that
             is owned by their colleage.  Furthermore, the colloration may be
-            occuring between organizations, such as when two employees from two
+            occuring between organizations, such as when employees from two
             different companies are participating in a joint project.  In such
             cases, the authorization server may have to perform multi-party
             authorization, where consent is collected from both the resource
@@ -329,16 +336,16 @@ Host: server.example.com
           
           <t>
             In scenarios in which the resource owner and requesting party are
-            not the same, authorization of the resource owner is asynchronous with
-            respect to any interactions with the requesting party.  The resource
-            owner may have granted the requesting party access ahead-of-time,
-            for example by inviting the requesting party by email address in a
-            sharing dialog.  The resource owner may also grant access to the
-            requesting party just-in-time, for example when the requesting party
-            clicks a "request access" button after attempting to view a document
-            that they are not allowed to access.  Any interactions between the
-            resource owner and requesting party are at the discretion of the
-            authorization server.
+            not the same, authorization by the resource owner is asynchronous
+            with respect to any interactions with the requesting party.  The
+            resource owner may have granted the requesting party access
+            ahead-of-time, for example by inviting the requesting party by email
+            address in a sharing dialog.  The resource owner may also grant
+            access to the requesting party just-in-time, for example when the
+            requesting party clicks a "request access" button after attempting
+            to view a document that they are not allowed to access.  Any
+            interactions between the resource owner and requesting party are at
+            the discretion of the authorization server.
           </t>
           
           <t>
@@ -359,28 +366,37 @@ Host: server.example.com
           
           <t>
             The access token is a credential used to access the protected
-            resource.  The client uses this access when making a request to a
-            protected resource as described in <xref target="authenticated-request"/>.
+            resource.  The client presents this access when making a request to
+            a protected resource as described in <xref target="authenticated-request"/>.
           </t>
           
           <t>
             The refresh token is a binding between the requesting party and the
-            client, and represents the requesting party's authorization for the
-            client to access protected resources on the requesting party's
-            behalf.  as defined in...
+            client, and represents the requesting party's authorization granted
+            to the client to access protected resources on the requesting
+            party's behalf.  The refresh token can be used to obtain new access
+            tokens as described in <xref target="non-interactive-authz"/>.
           </t>
         </section>
         
       </section>
       
       <section title="Non-Interactive Authorization Using Token Endpoint" anchor="non-interactive-authz">
+        <t>
+          If the client has already obtained the requesting party's
+          authorization to access protected resource, the client can attempt to
+          obtain an access token directly without end-user interaction.  The
+          client does so by making a token request to the token endpoint.  The
+          client includes the refresh token, which is the authorization grant
+          representing the requesting party's previously obtained authorization.
+        </t>
+        
         
         <section title="Client Requests Authorization using Refresh Token">
           <t>
-            If the client has already obtained the requesting party's
-            authorization to access protected resources, and the client was
-            issued a refresh token, the client can request authorization to
-            a protected resource using the refresh token.
+            The client requests an access token for a protected resource by
+            making a token request to the token endpoint as, as described in
+            Section 6 of OAuth 2.0 <xref target="RFC6749"/>.  
           </t>
           
           <t>
@@ -420,19 +436,6 @@ grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
 &scope=read.resource
 ]]></artwork>
           </figure>
-          
-          <t>
-            Responds with errors as defined in Section 5.2 of RFC 6749.  In addtion,
-            the following error codes are defined.
-            
-            <list style="hanging"> 
-              <t hangText="interaction_required"> <vspace blankLines="1"/>
-              The authorization server requires end-user interaction to proceed.
-              The client should make an authorization request to the authorization
-              endpoint.
-              </t>
-            </list> 
-          </t>
         
         </section>
         
@@ -443,7 +446,7 @@ grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
             authorization server then evaluates access control policies to
             determine what permissions the requesting party is authorized
             for at the target resource.  If the authorized permissions
-            contain all requested scopes, and any additional conditions put
+            allow all requested scopes, and any additional conditions put
             in place by policy are met, the authorization server issues an
             access token as described in Section 5.1 of OAuth 2.0 <xref target="RFC6749"/>.
           </t>
@@ -506,6 +509,7 @@ Authorization: Bearer mF_9.B5f-4.1JqM
       <?rfc include="reference.RFC.6749"?>
       <?rfc include="reference.RFC.6750"?>
       <?rfc include="reference.RFC.7235"?>
+      <?rfc include="reference.RFC.7591"?>
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-10.xml'?>
     
       <reference anchor="OpenID.Discovery" target="http://openid.net/specs/openid-connect-discovery-1_0.html">

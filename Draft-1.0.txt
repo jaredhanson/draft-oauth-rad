@@ -210,13 +210,13 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
    There are two options for obtaining an access token.
 
-   o  Interactive - the client redirects the end-user to the
-      authorization server's authorization endpoint, where the
-      authorization server interacts with the end-user in order to
-      obtain authorization
+   o  Interactive - used by the client to allow the authorization server
+      to interact with the end-user.  This option is described in
+      Section 2.2.
 
    o  Non-interactive - used by the client to obtain an access token
-      directly without end-user interaction.  The client must have
+      directly without end-user interaction.  This option is described
+      in Section 2.3.
 
 
 
@@ -226,22 +226,26 @@ Hanson                  Expires December 12, 2018               [Page 4]
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 
-      obtained end-user authorization prior in order for this option to
-      be successful.
-
    The process for obtaining an access token assumes that:
 
    o  The client has discovered the necessary metadata in order to
-      interact with the authorization server.  This may have been
-      staticly configured or retrieved dynamically using OAuth 2.0
-      Authorization Server Metadata [I-D.ietf-oauth-discovery] or OpenID
-      Connect Discovery 1.0 [OpenID.Discovery].
+      interact with the authorization server.  This information may have
+      been statically configured or retrieved dynamically using OAuth
+      2.0 Authorization Server Metadata [I-D.ietf-oauth-discovery] or
+      OpenID Connect Discovery 1.0 [OpenID.Discovery].
+
+   o  The client has obtained a client identifer and client credentials
+      valid at the authorization server.  These credentials may have
+      been statically configured or created dynamically using OAuth 2.0
+      Dynamic Client Registration Protocol [RFC7591].
 
 2.2.  Interactive Authorization Using Authorization Endpoint
 
-   The authorization endpoint allows the authorization server to
-   interact with the end-user requesting party.  TODO: Give examples
-   here.
+   When end-user interaction is necessary in order to obtain an access
+   token, the client requests authorization by redirecting the end-user
+   to the authorization endpoint with an authorization request.  The
+   authorization server then interacts with the end-user in order to
+   obtain authorization.
 
 2.2.1.  Client Redirects Requesting Party to Authorization Endpoint
 
@@ -265,13 +269,9 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    client MUST add the value of that parameter to the "scope" parameter
    of the authorization request.
 
-   For example (line breaks are for display purposes only):
 
-   GET /authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz
-       &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
-       &resource=https%3A%2F%2Fserver.example.net%2Fresource
-       &scope=read.resource HTTP/1.1
-   Host: server.example.com
+
+
 
 
 
@@ -281,6 +281,14 @@ Hanson                  Expires December 12, 2018               [Page 5]
 
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
+
+   For example (line breaks are for display purposes only):
+
+   GET /authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz
+       &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
+       &resource=https%3A%2F%2Fserver.example.net%2Fresource
+       &scope=read.resource HTTP/1.1
+   Host: server.example.com
 
 2.2.2.  Authorization Server Obtains Authorization
 
@@ -304,16 +312,16 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
    The end-user requesting party may or may not be the same as the
    resource owner.  Such cases occur, for example, in document sharing
-   scenarios where an end-user is requesing access to a document that is
-   owned by their colleage.  Furthermore, the colloration may be
-   occuring between organizations, such as when two employees from two
+   scenarios where an end-user is requesting access to a document that
+   is owned by their colleage.  Furthermore, the colloration may be
+   occuring between organizations, such as when employees from two
    different companies are participating in a joint project.  In such
    cases, the authorization server may have to perform multi-party
    authorization, where consent is collected from both the resource
    owner and the requesting party.
 
    In scenarios in which the resource owner and requesting party are not
-   the same, authorization of the resource owner is asynchronous with
+   the same, authorization by the resource owner is asynchronous with
    respect to any interactions with the requesting party.  The resource
    owner may have granted the requesting party access ahead-of-time, for
    example by inviting the requesting party by email address in a
@@ -321,14 +329,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    requesting party just-in-time, for example when the requesting party
    clicks a "request access" button after attempting to view a document
    that they are not allowed to access.  Any interactions between the
-   resource owner and requesting party are at the discretion of the
-   authorization server.
-
-   After completing its interaction with the end-user requesting party,
-   the authorization server redirects the requesting party back to the
-   client's redirection endpoint.
-
-
 
 
 
@@ -338,6 +338,13 @@ Hanson                  Expires December 12, 2018               [Page 6]
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 
+   resource owner and requesting party are at the discretion of the
+   authorization server.
+
+   After completing its interaction with the end-user requesting party,
+   the authorization server redirects the requesting party back to the
+   client's redirection endpoint.
+
 2.2.3.  Authorization Server Issues Tokens to Client
 
    The authorization server issues an access token and, optionally, a
@@ -346,22 +353,30 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    authorization request and defined by OAuth 2.0 [RFC6749].
 
    The access token is a credential used to access the protected
-   resource.  The client uses this access when making a request to a
+   resource.  The client presents this access when making a request to a
    protected resource as described in Section 2.4.
 
    The refresh token is a binding between the requesting party and the
-   client, and represents the requesting party's authorization for the
-   client to access protected resources on the requesting party's
-   behalf.  as defined in...
+   client, and represents the requesting party's authorization granted
+   to the client to access protected resources on the requesting party's
+   behalf.  The refresh token can be used to obtain new access tokens as
+   described in Section 2.3.
 
 2.3.  Non-Interactive Authorization Using Token Endpoint
 
+   If the client has already obtained the requesting party's
+   authorization to access protected resource, the client can attempt to
+   obtain an access token directly without end-user interaction.  The
+   client does so by making a token request to the token endpoint.  The
+   client includes the refresh token, which is the authorization grant
+   representing the requesting party's previously obtained
+   authorization.
+
 2.3.1.  Client Requests Authorization using Refresh Token
 
-   If the client has already obtained the requesting party's
-   authorization to access protected resources, and the client was
-   issued a refresh token, the client can request authorization to a
-   protected resource using the refresh token.
+   The client requests an access token for a protected resource by
+   making a token request to the token endpoint as, as described in
+   Section 6 of OAuth 2.0 [RFC6749].
 
    In addition to the parameters defined by Section 6 of OAuth 2.0
    [RFC6749], the following parameters are also defined:
@@ -372,27 +387,19 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
       client intends to use the requested access token.  The value of
       this parameter MUST be an absolute URI.
 
-   The client MUST include the location of the resource it is attempting
-   to access as the value of the "resource" parameter in the token
-   request.  If the resource server included a "scope" parameter in the
-   "WWW-Authenticate" header field of its response, the client MUST add
-   the value of that parameter to the "scope" parameter of the token
-   request.
-
-
-
-
-
-
-
-
-
 
 
 Hanson                  Expires December 12, 2018               [Page 7]
 
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
+
+   The client MUST include the location of the resource it is attempting
+   to access as the value of the "resource" parameter in the token
+   request.  If the resource server included a "scope" parameter in the
+   "WWW-Authenticate" header field of its response, the client MUST add
+   the value of that parameter to the "scope" parameter of the token
+   request.
 
    For example (line breaks are for display purposes only):
 
@@ -405,24 +412,15 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    &resource=https%3A%2F%2Fserver.example.net%2Fresource
    &scope=read.resource
 
-   Responds with errors as defined in Section 5.2 of RFC 6749.  In
-   addtion, the following error codes are defined.
-
-   interaction_required
-
-      The authorization server requires end-user interaction to proceed.
-      The client should make an authorization request to the
-      authorization endpoint.
-
 2.3.2.  Authorization Server Evaluates Access Control Policy
 
    The client validates the refresh token and determines which which
    requesting party and client it was bound to.  The authorization
    server then evaluates access control policies to determine what
    permissions the requesting party is authorized for at the target
-   resource.  If the authorized permissions contain all requested
-   scopes, and any additional conditions put in place by policy are met,
-   the authorization server issues an access token as described in
+   resource.  If the authorized permissions allow all requested scopes,
+   and any additional conditions put in place by policy are met, the
+   authorization server issues an access token as described in
    Section 5.1 of OAuth 2.0 [RFC6749].
 
 2.3.3.  Authorization Server Response on Authorization Failure
@@ -440,6 +438,8 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
       form to proceed.  The client MAY attempt to obtain an access token
       by redirecting the end-user requesting party to the authorization
       endpoint as described in Section 2.2.
+
+
 
 
 
@@ -485,16 +485,16 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
               DOI 10.17487/RFC7235, June 2014, <https://www.rfc-
               editor.org/info/rfc7235>.
 
+   [RFC7591]  Richer, J., Ed., Jones, M., Bradley, J., Machulak, M., and
+              P. Hunt, "OAuth 2.0 Dynamic Client Registration Protocol",
+              RFC 7591, DOI 10.17487/RFC7591, July 2015,
+              <https://www.rfc-editor.org/info/rfc7591>.
+
    [I-D.ietf-oauth-discovery]
               Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
               Authorization Server Metadata", draft-ietf-oauth-
               discovery-10 (work in progress), March 2018.
 
-   [OpenID.Discovery]
-              Sakimura, N., Bradley, J., Jones, M., and E. Jay, "OpenID
-              Connect Discovery 1.0", November 2014,
-              <http://openid.net/specs/
-              openid-connect-discovery-1_0.html>.
 
 
 
@@ -506,6 +506,12 @@ Hanson                  Expires December 12, 2018               [Page 9]
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 
+   [OpenID.Discovery]
+              Sakimura, N., Bradley, J., Jones, M., and E. Jay, "OpenID
+              Connect Discovery 1.0", November 2014,
+              <http://openid.net/specs/
+              openid-connect-discovery-1_0.html>.
+
 Author's Address
 
    Jared Hanson
@@ -513,12 +519,6 @@ Author's Address
 
    Email: jaredhanson@gmail.com
    URI:   http://www.jaredhanson.net/
-
-
-
-
-
-
 
 
 
