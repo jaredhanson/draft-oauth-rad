@@ -80,10 +80,10 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    various software as a service (SaaS) providers, including a team
    collaboration application (resource server), cloud file system
    (another resource server), and a customer relationship management
-   application (yet another resource server).  Team manager Alice
-   (resource owner) can manage the access that employees Bob and Carol
-   (requesting parties) have to the various files, folders, and other
-   information hosted by the Saas applications.
+   service (yet another resource server).  Team manager Alice (resource
+   owner) can manage the access that employees Bob and Carol (requesting
+   parties) have to the various files, folders, and other information
+   hosted by the SaaS providers.
 
 1.1.  Notational Conventions
 
