@@ -396,7 +396,7 @@ Host: server.example.com
           <t>
             The client requests an access token for a protected resource by
             making a token request to the token endpoint as, as described in
-            Section 6 of OAuth 2.0 <xref target="RFC6749"/>.  
+            Section 6 of OAuth 2.0 <xref target="RFC6749"/>.
           </t>
           
           <t>
@@ -442,15 +442,59 @@ grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
         <section title="Authorization Server Evaluates Access Control Policy">
           <t>
             The client validates the refresh token and determines which
-            which requesting party and client it was bound to.  The
-            authorization server then evaluates access control policies to
-            determine what permissions the requesting party is authorized
-            for at the target resource.  If the authorized permissions
-            allow all requested scopes, and any additional conditions put
-            in place by policy are met, the authorization server issues an
-            access token as described in Section 5.1 of OAuth 2.0 <xref target="RFC6749"/>.
+            requesting party and client it was bound to.  The authorization
+            server then evaluates access control policies to determine what
+            permissions the requesting party is authorized for at the target
+            resource.  If the authorized permissions allow all requested scopes,
+            and any additional conditions put in place by policy are met, the
+            authorization server issues an access token as described in Section
+            5.1 of OAuth 2.0 <xref target="RFC6749"/>.
           </t>
           
+          <t>
+            Section 6 of OAuth 2.0 <xref target="RFC6749"/> states the
+            following about the "scope" parameter in the authorization request.
+            <list>
+              <t>
+                The requested scope MUST NOT include any scope not originally
+                granted by the resource owner, and if omitted is treated as
+                equal to the scope originally granted by the resource owner.
+              </t>
+            </list>
+          </t>
+          
+          <t>
+            The "originally granted" restriction is not applicable in
+            environments where access control policies can dynamically change an
+            end-user's set of allowed permissions to various resources.  For
+            example a resource owner may initially grant a requesting party
+            access to view a document, and then subsequently grant the
+            requesting party access to edit the same document.
+          </t>
+          
+          <t>
+            In order to accomodate such dynamic environments, this profile
+            relaxes the specification to state:
+            <list>
+              <t>
+                The requested scope MAY include any scope, and if omitted is
+                treated as equal to the scope originally granted by the resource
+                owner.
+              </t>
+            </list>
+          </t>
+          
+          <t>
+            The following enhanced restriction is put in place in order to
+            ensure that access control policy is enforced:
+            <list>
+              <t>
+                The authorization server MUST NOT include any scope in the
+                access token which a requesting party and/or client is not
+                allowed to possess according to access control policies.
+              </t>
+            </list>
+          </t>
         </section>
         
         <section title="Authorization Server Response on Authorization Failure">

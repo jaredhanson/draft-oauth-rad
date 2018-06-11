@@ -414,7 +414,7 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 2.3.2.  Authorization Server Evaluates Access Control Policy
 
-   The client validates the refresh token and determines which which
+   The client validates the refresh token and determines which
    requesting party and client it was bound to.  The authorization
    server then evaluates access control policies to determine what
    permissions the requesting party is authorized for at the target
@@ -422,6 +422,44 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    and any additional conditions put in place by policy are met, the
    authorization server issues an access token as described in
    Section 5.1 of OAuth 2.0 [RFC6749].
+
+   Section 6 of OAuth 2.0 [RFC6749] states the following about the
+   "scope" parameter in the authorization request.
+
+      The requested scope MUST NOT include any scope not originally
+      granted by the resource owner, and if omitted is treated as equal
+      to the scope originally granted by the resource owner.
+
+   The "originally granted" restriction is not applicable in
+   environments where access control policies can dynamically change an
+   end-user's set of allowed permissions to various resources.  For
+   example a resource owner may initially grant a requesting party
+   access to view a document, and then subsequently grant the requesting
+   party access to edit the same document.
+
+   In order to accomodate such dynamic environments, this profile
+   relaxes the specification to state:
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 8]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
+      The requested scope MAY include any scope, and if omitted is
+      treated as equal to the scope originally granted by the resource
+      owner.
+
+   The following enhanced restriction is put in place in order to ensure
+   that access control policy is enforced:
+
+      The authorization server MUST NOT include any scope in the access
+      token which a requesting party and/or client is not allowed to
+      possess according to access control policies.
 
 2.3.3.  Authorization Server Response on Authorization Failure
 
@@ -438,17 +476,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
       form to proceed.  The client MAY attempt to obtain an access token
       by redirecting the end-user requesting party to the authorization
       endpoint as described in Section 2.2.
-
-
-
-
-
-
-
-Hanson                  Expires December 12, 2018               [Page 8]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
 
 2.4.  Requesting a Resource With Authentication Credentials
 
@@ -470,6 +497,14 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
               editor.org/info/rfc2119>.
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 9]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
 
    [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
               RFC 6749, DOI 10.17487/RFC6749, October 2012,
@@ -495,17 +530,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
               Authorization Server Metadata", draft-ietf-oauth-
               discovery-10 (work in progress), March 2018.
 
-
-
-
-
-
-
-Hanson                  Expires December 12, 2018               [Page 9]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
-
    [OpenID.Discovery]
               Sakimura, N., Bradley, J., Jones, M., and E. Jay, "OpenID
               Connect Discovery 1.0", November 2014,
@@ -519,30 +543,6 @@ Author's Address
 
    Email: jaredhanson@gmail.com
    URI:   http://www.jaredhanson.net/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
