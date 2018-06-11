@@ -21,15 +21,45 @@
         Resource Authorization Directive (RAD) is a profile of OAuth 2.0.  RAD
         defines how clients can discover which authorization server governs
         access to a protected resource.  RAD also profiles existing OAuth 2.0
-        authorization grants to define how the client can obtain access to any
-        number of protected resources with the minimum amount of user
-        interaction.
+        authorization grants to define how the client can obtain access on
+        behalf of a requesting party to any number of protected resources
+        residing within multiple security domains with the minimum amount of
+        user interaction.
       </t>
     </abstract>
   </front>
   <middle>
     
     <section title="Introduction">
+      <t>
+        This specification defines a profile of OAuth 2.0, enhancing its
+        capabilities in the following ways.
+        
+        <list style='symbols'>
+          <t>
+            The resource owner authorizes protected resource access to clients
+            used by entities that are in a requesting party role.  This enables
+            multi-party authorization, rather that delegated application access
+            alone.
+          </t>
+          <t>
+            It enables resource servers operating in multiple security domains
+            to federate authorization processing with an authorization server
+            residing in yet another security domain.
+          </t>
+        </list>
+      </t>
+      
+      <t>
+        For example, the company Acme Corporation can use an access management
+        service (authorization server) to control access to various software as
+        a service (SaaS) providers, including a team collaboration application
+        (resource server), cloud file system (another resource server), and a
+        customer relationship management application (yet another resource
+        server).  Team manager Alice (resource owner) can manage the access that
+        employees Bob and Carol (requesting parties) have to the various files,
+        folders, and other information hosted by the Saas applications.
+      </t>
       
       <section title="Notational Conventions">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -591,5 +621,9 @@ Authorization: Bearer mF_9.B5f-4.1JqM
         </front>
       </reference>
     </references>
+    
+    <section title="Comparison With User Managed Access 2.0" anchor="uma2-compare">
+      
+    </section>
   </back>
 </rfc>
