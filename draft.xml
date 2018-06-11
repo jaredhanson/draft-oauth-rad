@@ -159,7 +159,7 @@ Host: server.example.net
           </figure>
         </section>
         
-        <section title="Resource Server Responds to Client's Unauthenticated Request">
+        <section title="Resource Server Responds to Client's Unauthenticated Request" anchor="auth-challenge">
           <t>
             The resource server responds to the client's unauthenticated request
             by including a WWW-Authenticate header field, as described in Section
@@ -525,9 +525,8 @@ grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
         
         <section title="Client Requests a Resource With Authentication Credentials">
           <t>
-            The client requests a protected resource and presents authentication
-            credentials.  The authentication credential is the access token
-            issued by the authorization server.
+            The client requests a protected resource and presents the access
+            token issued by the authorization server.
           </t>
         
           <figure>
@@ -540,6 +539,18 @@ Host: server.example.net
 Authorization: Bearer mF_9.B5f-4.1JqM
 ]]></artwork>
           </figure>
+        </section>
+        
+        <section title="Resource Server Responds to Client's Authenticated Request">
+          <t>
+            The resource server responds to the client's authenticated resource
+            request.
+          </t>
+          
+          <t>
+            If a resource access request fails due to an invalid or expired
+            access token, the resource server responds as described in <xref target="auth-challenge"/>.
+          </t>
         </section>
         
       </section>

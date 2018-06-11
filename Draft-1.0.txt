@@ -481,9 +481,8 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
 2.4.1.  Client Requests a Resource With Authentication Credentials
 
-   The client requests a protected resource and presents authentication
-   credentials.  The authentication credential is the access token
-   issued by the authorization server.
+   The client requests a protected resource and presents the access
+   token issued by the authorization server.
 
    For example (line breaks are for display purposes only):
 
@@ -491,13 +490,14 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    Host: server.example.net
    Authorization: Bearer mF_9.B5f-4.1JqM
 
-3.  Normative References
+2.4.2.  Resource Server Responds to Client's Authenticated Request
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
-              editor.org/info/rfc2119>.
+   The resource server responds to the client's authenticated resource
+   request.
 
+   If a resource access request fails due to an invalid or expired
+   access token, the resource server responds as described in
+   Section 2.1.2.
 
 
 
@@ -505,6 +505,13 @@ Hanson                  Expires December 12, 2018               [Page 9]
 
 Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
+
+3.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
+              editor.org/info/rfc2119>.
 
    [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
               RFC 6749, DOI 10.17487/RFC6749, October 2012,
@@ -543,13 +550,6 @@ Author's Address
 
    Email: jaredhanson@gmail.com
    URI:   http://www.jaredhanson.net/
-
-
-
-
-
-
-
 
 
 
