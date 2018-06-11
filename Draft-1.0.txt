@@ -68,7 +68,7 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
    o  The resource owner authorizes protected resource access to clients
       used by entities that are in a requesting party role.  This
-      enables multi-party authorization, rather that delegated
+      enables multi-party authorization, rather than delegated
       application access alone.
 
    o  It enables resource servers operating in multiple security domains
@@ -134,49 +134,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
       authenticating the requesting party and obtaining the resource
       owner's authorization.
 
-1.3.  WIP
-
-   Continuous authorization...
-
-   OAuth defines the refresh token in section 1.5 as: A refresh token is
-   a string representing the authorization granted to the client by the
-   resource owner.
-
-   This profile extends the meaning of this to include a requesting
-   party.
-
-   The value of the scope parameter is expressed as a list of space-
-   delimited, case-sensitive strings.  The strings are defined by the
-   authorization server.  Section 3.3.  This specificatin clarifies this
-   to state that the scope is defined by the resource server
-
-   the authorization server authenticates the resource owner and obtains
-   an authorization decision (by asking the resource owner or by
-   establishing approval via other means) section 4.1.1
-
-   The scope of the access request as described by Section 3.3.  The
-   requested scope MUST NOT include any scope not originally granted by
-   the resource owner, and if omitted is treated as equal to the scope
-   originally granted by the resource owner.  Section 6.  This
-   specification clarifies "originally granted", chiefly to remove the
-   constraint.  This is in acknowledgement that the resource owner's
-   grant can change dynamically at any time, either to decrease _or_
-   increase the scope of access.
-
-
-
-Hanson                  Expires December 12, 2018               [Page 3]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
-
-   The refresh token is bound to the client and requesting party.
-
-   Mechanism for resource server ot indicated trusted authorization
-   servers: `iss` https://tools.ietf.org/html/draft-hardt-oauth-
-   distributed-00 auri and duri rel values: https://tools.ietf.org/html/
-   draft-sakimura-oauth-meta-08
-
 2.  Obtaining Authorization and Accessing Protected Resources
 
 2.1.  Requesting a Resource Without Authentication Credentials
@@ -204,6 +161,15 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    by including a WWW-Authenticate header field, as described in
    Section 4.1 of [RFC7235].
 
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 3]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
    This specification defines the "issuer" authentication parameter for
    use by authentication schemes that wish to indicate which
    authorization server issues access tokens that can be used as
@@ -218,13 +184,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    When responding to the client's unauthenticated request, the resource
    server MUST include the "issuer" parameter and MAY include a "scope"
    parameter, as described in Section 3 of [RFC6750].
-
-
-
-Hanson                  Expires December 12, 2018               [Page 4]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
 
    For example (line breaks are for display purposes only):
 
@@ -258,6 +217,15 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
    o  The client has obtained a client identifer and client credentials
       valid at the authorization server.  These credentials may have
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 4]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
       been statically configured or created dynamically using OAuth 2.0
       Dynamic Client Registration Protocol [RFC7591].
 
@@ -274,13 +242,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    The client redirects the end-user requesting party to the
    authorization server's authorization endpoint, as described in OAuth
    2.0 [RFC6749].
-
-
-
-Hanson                  Expires December 12, 2018               [Page 5]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
 
    In addition to the parameters defined by OAuth 2.0 [RFC6749], the
    following parameters are also defined:
@@ -313,6 +274,14 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    necessary conditions defined by said policies are met in order to
    issue an access token.  If necessary conditions are not met, the
    authorization server MUST NOT issue an access token.  The mechanisms
+
+
+
+Hanson                  Expires December 12, 2018               [Page 5]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
    by which policies are defined by the resource owner are outside the
    scope of this specification.
 
@@ -330,14 +299,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    resource owner.  Such cases occur, for example, in document sharing
    scenarios where an end-user is requesting access to a document that
    is owned by their colleage.  Furthermore, the colloration may be
-
-
-
-Hanson                  Expires December 12, 2018               [Page 6]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
-
    occuring between organizations, such as when employees from two
    different companies are participating in a joint project.  In such
    cases, the authorization server may have to perform multi-party
@@ -367,6 +328,16 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    issued are specific to the "response_type" parameter in the
    authorization request and defined by OAuth 2.0 [RFC6749].
 
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 6]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
+
    The access token is a credential used to access the protected
    resource.  The client presents this access when making a request to a
    protected resource as described in Section 2.4.
@@ -386,13 +357,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    client includes the refresh token, which is the authorization grant
    representing the requesting party's previously obtained
    authorization.
-
-
-
-Hanson                  Expires December 12, 2018               [Page 7]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
 
 2.3.1.  Client Requests Authorization using Refresh Token
 
@@ -415,6 +379,20 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    "WWW-Authenticate" header field of its response, the client MUST add
    the value of that parameter to the "scope" parameter of the token
    request.
+
+
+
+
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 7]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
 
    For example (line breaks are for display purposes only):
 
@@ -441,15 +419,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    Section 6 of OAuth 2.0 [RFC6749] states the following about the
    "scope" parameter in the authorization request.
 
-
-
-
-
-Hanson                  Expires December 12, 2018               [Page 8]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
-
       The requested scope MUST NOT include any scope not originally
       granted by the resource owner, and if omitted is treated as equal
       to the scope originally granted by the resource owner.
@@ -470,6 +439,16 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
 
    The following enhanced restriction is put in place in order to ensure
    that access control policy is enforced:
+
+
+
+
+
+
+Hanson                  Expires December 12, 2018               [Page 8]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
 
       The authorization server MUST NOT include any scope in the access
       token which a requesting party and/or client is not allowed to
@@ -498,14 +477,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
    The client requests a protected resource and presents the access
    token issued by the authorization server.
 
-
-
-
-Hanson                  Expires December 12, 2018               [Page 9]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
-
    For example (line breaks are for display purposes only):
 
    GET /resource HTTP/1.1
@@ -527,6 +498,13 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
               editor.org/info/rfc2119>.
+
+
+
+Hanson                  Expires December 12, 2018               [Page 9]
+
+Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
+
 
    [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
               RFC 6749, DOI 10.17487/RFC6749, October 2012,
@@ -551,16 +529,6 @@ Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
               Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
               Authorization Server Metadata", draft-ietf-oauth-
               discovery-10 (work in progress), March 2018.
-
-
-
-
-
-
-Hanson                  Expires December 12, 2018              [Page 10]
-
-Internet-Draft OAuth 2.0 Resource Authorization Directive      June 2018
-
 
    [OpenID.Discovery]
               Sakimura, N., Bradley, J., Jones, M., and E. Jay, "OpenID
@@ -589,28 +557,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Hanson                  Expires December 12, 2018              [Page 11]
+Hanson                  Expires December 12, 2018              [Page 10]
