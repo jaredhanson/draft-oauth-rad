@@ -358,7 +358,7 @@ Host: server.example.com
       <section title="Non-Interactive Authorization Using Token Endpoint" anchor="non-interactive-authz">
         <t>
           If the client has already obtained the requesting party's
-          authorization to access protected resource, the client can attempt to
+          authorization to access protected resources, the client can attempt to
           obtain an access token directly without end-user interaction.  The
           client does so by making a token request to the token endpoint.  The
           client includes the refresh token, which is the authorization grant
@@ -415,8 +415,8 @@ grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
         
         <section title="Authorization Server Evaluates Access Control Policy">
           <t>
-            The client validates the refresh token and determines which
-            requesting party and client it was bound to.  The authorization
+            The authorization server validates the refresh token and determines
+            which requesting party and client it was bound to.  The authorization
             server then evaluates access control policies to determine what
             permissions the requesting party is authorized for at the target
             resource.  If the authorized permissions allow all requested scopes,
@@ -442,8 +442,8 @@ grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
             environments where access control policies can dynamically change an
             end-user's set of allowed permissions to various resources.  For
             example a resource owner may initially grant a requesting party
-            access to view a document, and then subsequently grant the
-            requesting party access to edit the same document.
+            access to view and edit document, and then subsequently revoke the
+            requesting party's ability to edit that document.
           </t>
           
           <t>
@@ -567,7 +567,79 @@ Authorization: Bearer mF_9.B5f-4.1JqM
     </references>
     
     <section title="Comparison With User Managed Access 2.0" anchor="uma2-compare">
+      <t>
+        This specification is intended to address a similar set of use cases
+        supported by User Managed Access (UMA) 2.0.  In contrast with UMA 2.0,
+        which introduces additional endpoints, grant types, and tokens, RAD
+        reuses the already existing capabilities of OAuth 2.0 alone.
+      </t>
       
+      <t>
+        It is expected that by reusing existing OAuth 2.0 functionality, it will
+        be easier for developers of resource servers and clients to implement
+        RAD, relative to the effort required to implement UMA 2.0.  It is
+        believed, by the author, that while UMA introduced important
+        capabilities, the adoption has suffed due to the complexity of the
+        protocol.
+      </t>
+      
+      <section title="Claims Interaction Endpoint">
+        <t>
+          UMA 2.0 defines a claims interaction endpoint to interact with
+          end-users to gather claims.
+        </t>
+        <t>
+          RAD eliminates the claims interaction endpoint by reusing the
+          authorization endpoint.  The authorization endpoint in a typical
+          authorization server already interacts with end-users in order to
+          handle login and consent (both of which can be considered claims
+          in and of themselves).  Any interaction necessary to gather additional
+          claims can be handled in a similar manner.
+        </t>
+        <t>
+          Due to the elimination of the claims interaction endpoint, the need
+          for a client to provide a corresponding claims redirection endpoint is
+          also eliminated.
+        </t>
+      </section>
+      
+      <section title="Permission Endpoint, Permission Ticket, and UMA Authentication Scheme">
+        <t>
+          UMA 2.0 defines a permission endpoint which a resource server uses
+          to request permissions with the authorization server on the client's
+          behalf.  Once the permission has been requested, it is represented as
+          a permission ticket which is transmitted to the client via the UMA
+          authentication scheme in an HTTP response.  The client then transmits
+          the ticket back to the authorization server when requesting
+          authorization.
+        </t>
+        <t>
+          RAD eliminates the the need for the permission endpoint, permission
+          ticket and UMA authorization scheme by reusing the existing HTTP
+          authentication framework.  When an unauthorized request is received,
+          the protected resource indicates the scope of access required, as well
+          as the authorization server that issues access tokens, in the
+          parameters of the existing authentication scheme it supports (typically
+          "Bearer").  The client then makes a standard OAuth authorization request
+          including the scope of access it is requesting.  Once the access token
+          has been issued, the client presents it to the protected resource using
+          the supported authentication scheme.
+        </t>
+      </section>
+      
+      <section title="Persisted Claims Token">
+        <t>
+          The persisted claims token (PCT) in UMA 2.0 is a correlation handle
+          that represents a set of claims collected during one authorization
+          process that can be used to optimize a future authorization process.
+        </t>
+        <t>
+          RAD eliminates the need for a PCT by reusing the refresh token, which
+          represents the grant authorized by the requesting party.  Any
+          additional claims collected from the requesting party during the
+          authorization process can be correlated with the refresh token.
+        </t>
+      </section>
     </section>
   </back>
 </rfc>
